@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent" android:padding="5dip">
+<RelativeLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/task_turnpoints"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:text="@string/titleturnpoint"
+			android:textStyle="bold"
+			android:textSize="18sp"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:textColor="#000" />
+
+		<TextView
+			android:id="@+id/task_radius"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/task_turnpoints"
+			android:text="@string/tpradius"
+			android:textStyle="bold"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:textColor="#000" />
+		<EditText
+			android:id="@+id/task_pointradius"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/task_radius"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:inputType="numberSigned|numberDecimal" />
+
+		<TextView
+			android:id="@+id/task_type"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/task_pointradius"
+			android:text="@string/tptype"
+			android:textStyle="bold"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:textColor="#000" />
+		<Spinner
+			android:id="@+id/task_pointtype"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/task_type"
+			android:entries="@array/taskpointtype_arrays"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:prompt="@string/tptype"/>
+
+		<TextView
+			android:id="@+id/task_shape"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/task_pointtype"
+			android:text="@string/tpshape"
+			android:textStyle="bold"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:textColor="#000" />
+		<Spinner
+			android:id="@+id/task_pointshape"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/task_shape"
+			android:entries="@array/taskpointshape_arrays"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:prompt="@string/tpshape"/>
+
+
+		<ListView
+			android:id="@+id/listwp"
+			android:layout_width="fill_parent"
+			android:layout_height="match_parent"
+			android:layout_below="@id/task_pointshape"
+			android:background="#000000"
+			android:layout_marginLeft="20dp"
+			android:layout_marginRight="20dp"
+			android:scrollbars="vertical">
+		</ListView>
+
+</RelativeLayout>
+</ScrollView>

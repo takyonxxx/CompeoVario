@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#333"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#999"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_openTask"
+            style="@style/btnStyleGenoa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="@string/btn_opentask"
+            android:textSize="14sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"/>
+
+        <Button
+            android:id="@+id/btn_addWp"
+            style="@style/btnStyleGenoa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="@string/btn_addTp"
+            android:textSize="14sp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/btn_openTask"
+            android:layout_toLeftOf="@+id/btn_dellTask"/>
+
+        <Button
+            android:id="@+id/btn_dellTask"
+            style="@style/btnStyleGenoa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="@string/btn_delltask"
+            android:textSize="14sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"/>
+
+
+    </RelativeLayout>
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tlTable00"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#CCC"
+        android:paddingTop="1dp">
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#CCC"
+            android:paddingBottom="1dp"
+            android:paddingRight="1dp">
+
+            <TextView
+                android:id="@+id/textstime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:background="#CCC"
+                android:text="@string/txt_starttime"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txt_starttime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:background="#000"
+                android:ems="10"
+                android:padding="5dp"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:text="@string/txt_stime"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#CCC"
+            android:paddingBottom="1dp"
+            android:paddingRight="1dp">
+
+            <TextView
+                android:id="@+id/textetime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:background="#CCC"
+                android:text="@string/txt_endtime"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txt_endtime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:background="#000"
+                android:ems="10"
+                android:padding="5dp"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:text="@string/txt_etime"
+                android:textStyle="bold"></EditText>
+
+
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#333333"
+            android:padding="3dp"
+            android:text="@string/titletask"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/tlTable01"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#CCC"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#CCC"
+                android:paddingBottom="1dp"
+                android:paddingRight="1dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="1"
+                    android:background="#333"
+                    android:gravity="left"
+                    android:padding="3dp"
+                    android:text="Move"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="0.5"
+                    android:background="#333"
+                    android:gravity="left"
+                    android:padding="3dp"
+                    android:text="Id"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="1.2"
+                    android:background="#333"
+                    android:gravity="left"
+                    android:padding="3dp"
+                    android:text="Name"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="1"
+                    android:background="#333"
+                    android:gravity="left"
+                    android:padding="3dp"
+                    android:text="Type"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="1.2"
+                    android:background="#333"
+                    android:gravity="left"
+                    android:padding="3dp"
+                    android:text="Shape"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="1"
+                    android:background="#333"
+                    android:gravity="left"
+                    android:padding="3dp"
+                    android:text="Radius"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="1"
+                    android:background="#333"
+                    android:gravity="left"
+                    android:padding="3dp"
+                    android:text="Dist"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+            </TableRow>
+        </TableLayout>
+        <!-- Need to wrap DragListView in another layout for
+                wrap_content to work for some reason -->
+        <FrameLayout
+            android:id="@+id/dragListFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.woxthebox.draglistview.DragListView
+                android:id="@+id/drag_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+  

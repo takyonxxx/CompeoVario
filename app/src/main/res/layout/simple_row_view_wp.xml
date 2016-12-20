@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#333"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:id="@+id/tlTable01">
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#CCC"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp">
+            <TextView
+                android:id="@+id/wp_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:padding="3dp"
+                android:textStyle="bold"
+                android:background="#999"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:text=""/>
+            <TextView
+                android:id="@+id/wp_altitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:padding="3dp"
+                android:textStyle="bold"
+                android:background="#999"
+                android:textColor="#FFFF00"
+                android:gravity="center"
+                android:text=""/>
+        </TableRow>
+    </TableLayout>
+</RelativeLayout>

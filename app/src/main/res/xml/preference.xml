@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preferences_screen">
+
+    <PreferenceCategory
+        android:key="map_options"
+        android:title="@string/settings_menu_map_options">
+        <ListPreference
+            android:key="map_tile_source"
+            android:title="@string/settings_menu_map_tile_provider"></ListPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="thermic_options"
+        android:title="@string/settings_menu_thermic_options">
+
+        <EditTextPreference
+            android:defaultValue="2"
+            android:inputType="number"
+            android:key="thermicvariovalue"
+            android:maxLength="2"
+            android:summary="Trigger vario value for thermic cach"
+            android:title="Minumum Vario" />
+
+        <EditTextPreference
+            android:defaultValue="10"
+            android:inputType="number"
+            android:key="thermicvariocount"
+            android:maxLength="4"
+            android:summary="Waiting for this number to create thermic point"
+            android:title="Vario Count" />
+
+        <EditTextPreference
+            android:defaultValue="30"
+            android:inputType="number"
+            android:key="thermicresetavg"
+            android:maxLength="4"
+            android:summary="Reset Avg values on every specific seconds"
+            android:title="Reset Avg Period" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="thermicdraw"
+            android:summary="Enable/Disable drawing thermics on map"
+            android:title="Draw Thermics" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="first_category"
+        android:title="Log Settings">
+        <ListPreference
+            android:defaultValue="3000"
+            android:entries="@array/updateInterval"
+            android:entryValues="@array/updateIntervalValues"
+            android:key="log_updates_interval"
+            android:summary="Define how often log updates will be in igc"
+            android:title="Log Updates interval" />
+        <EditTextPreference
+            android:inputType="text"
+            android:key="liveusername"
+            android:summary="Livetrack24 Username for login"
+            android:title="Livetrack24 Username" />
+        <EditTextPreference
+            android:inputType="textPassword"
+            android:key="livepassword"
+            android:summary="Livetrack24 Password for login"
+            android:title="Livetrack24 Password" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="livetrackenabled"
+            android:summary="Enable sending data to Livetrack24"
+            android:title="Enable Livetrack24 on Start" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="second_category"
+        android:title="Pilot Info">
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="pilotname"
+            android:summary="Define Pilot Name"
+            android:title="Pilot Name" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="glidermodel"
+            android:summary="Define Glider Name-Model"
+            android:title="Glider Name-Model" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="glidercertf"
+            android:summary="Define Glider Certificate"
+            android:title="Glider Certificate" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:inputType="number"
+            android:key="civlid"
+            android:summary="Define Civl ID"
+            android:title="Civl ID" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

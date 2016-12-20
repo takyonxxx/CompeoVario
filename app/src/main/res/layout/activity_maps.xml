@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Copyright (C) 2012 The Android Open Source Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/layoutUpperGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/textUpperGroup"
+            android:layout_width="fill_parent"
+            android:stretchColumns="0,1,2,3,4"
+            android:layout_height="wrap_content">
+
+            <TableRow android:padding="1dp">
+
+                <TextView
+                    android:id="@+id/txt_time"
+                    android:background="@drawable/textshape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="00:00:00"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginLeft="1dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txt_distgoal"
+                    android:background="@drawable/textshape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="Dist Goal\n0 km"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:layout_marginRight="3dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txt_altgoal"
+                    android:background="@drawable/textshape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="Alt Goal\n0 m"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:layout_marginRight="3dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txt_gravg"
+                    android:background="@drawable/textshape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="Gr Avg\n0"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:layout_marginRight="3dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txt_varioavg"
+                    android:background="@drawable/textshape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="Vario Avg\n0 m/s"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:layout_marginRight="2dp"
+                    android:textStyle="bold"/>
+
+            </TableRow>
+        </TableLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutBottomGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/textBottomGroup"
+            android:layout_width="fill_parent"
+            android:stretchColumns="0,1,2"
+            android:layout_height="wrap_content">
+
+            <TableRow android:padding="1dp">
+
+                <TextView
+                    android:id="@+id/txt_speed"
+                    android:background="@drawable/textshape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="Speed\n0 km"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginLeft="1dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txt_vario"
+                    android:background="@drawable/textshape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="VSpeed\n0 m/s"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:layout_marginRight="3dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txt_altitude"
+                    android:background="@drawable/textshape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:text="Altitude\n0 m"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:layout_marginRight="2dp"
+                    android:textStyle="bold"/>
+
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+    </fragment>
+
+    <TextView
+        android:id="@+id/txt_disttakeoff"
+        android:background="@drawable/textshape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 km"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="3dp"
+        android:visibility="gone"
+        android:layout_above="@+id/compass_rose"
+        android:layout_alignLeft="@+id/compass_rose"
+        android:layout_alignStart="@+id/compass_rose"
+        android:layout_alignRight="@+id/compass_rose"
+        android:layout_alignEnd="@+id/compass_rose"/>
+
+    <ImageView
+        android:id="@+id/compass_rose"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:visibility="gone"
+        android:src="@drawable/windcircle" />
+
+    <ImageView
+        android:id="@+id/compass_arrow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="30dp"
+        android:paddingBottom="10dp"
+        android:visibility="gone"
+        android:src="@drawable/reduparrow" />
+    <TextView
+        android:id="@+id/txt_activewp"
+        android:background="@drawable/textshape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="3dp"
+        android:visibility="gone"
+        android:layout_below="@+id/compass_rose"
+        android:layout_alignLeft="@+id/compass_rose"
+        android:layout_alignStart="@+id/compass_rose"
+        android:layout_alignRight="@+id/compass_rose"
+        android:layout_alignEnd="@+id/compass_rose" />
+
+    <ToggleButton
+        android:id="@+id/toggle_gps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/enablegps"
+        android:textOn="On"
+        android:textOff="Off"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_above="@+id/layoutBottomGroup"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/txt_live"
+        android:background="@drawable/textshape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="2dp"
+        android:padding="3dp"
+        android:visibility="gone"
+        android:layout_above="@+id/layoutBottomGroup"
+        android:layout_alignParentLeft="true"/>
+
+</RelativeLayout>

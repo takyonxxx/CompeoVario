@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent" android:padding="5dip">
+	<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:textSize="20sp"
+			android:layout_height="wrap_content"
+			android:id="@+id/task_pointname"
+			android:textStyle="bold"
+			android:textColor="#084B8A"
+			android:paddingBottom="10dp" />
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/tpradius"
+			android:textStyle="bold"
+			android:textSize="16sp"
+			android:textColor="#000" />
+
+		<EditText android:id="@+id/task_pointradius"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingBottom="5dp"
+			android:textSize="14sp"
+			android:inputType="numberSigned|numberDecimal" />
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/tptype"
+			android:textSize="16sp"
+			android:textStyle="bold"
+			android:textColor="#000" />
+
+		<Spinner
+			android:id="@+id/task_pointtype"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:entries="@array/taskpointtype_arrays"
+			android:paddingBottom="5dp"
+			android:textSize="14sp"
+			android:prompt="@string/tptype"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/tpshape"
+			android:textStyle="bold"
+			android:textSize="16sp"
+			android:textColor="#000" />
+
+		<Spinner
+			android:id="@+id/task_pointshape"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:entries="@array/taskpointshape_arrays"
+			android:textSize="14sp"
+			android:prompt="@string/tpshape"/>
+	</LinearLayout>
+</ScrollView>
