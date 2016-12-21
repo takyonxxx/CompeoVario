@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent" android:padding="2dip">
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dip">
+
+    <TextView
+        android:id="@+id/txttitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:textSize="16dip"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnmenusettings"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Settings" />
+
+    <Button
+        android:id="@+id/btnmenutask"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Task Manger" />
+
+    <Button
+        android:id="@+id/btnmenufiles"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Manage Files" />
+
+</LinearLayout>
+
+</ScrollView>

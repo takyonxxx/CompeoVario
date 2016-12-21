@@ -48,6 +48,8 @@
         <activity android:name=".filepicker.FilePicker"/>
         <activity android:name=".TaskEditor"/>
         <activity android:name=".FilesActivity"/>
+        <activity android:name=".MenuActivity"/>
+
 
         <meta-data
             android:name="com.google.android.gms.version"

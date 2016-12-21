@@ -1,4 +1,7 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MyActivity">
+
     <item
         android:id="@+id/settings"
         android:icon="@android:drawable/ic_menu_manage"

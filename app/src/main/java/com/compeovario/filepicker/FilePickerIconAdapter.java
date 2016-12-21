@@ -91,7 +91,7 @@ class FilePickerIconAdapter extends BaseAdapter {
 	 * Sets the data of this adapter.
 	 * 
 	 * @param files
-	 *            the new files for this adapter.
+	 *            the new fileslayout for this adapter.
 	 * @param newHasParentFolder
 	 *            true if the file array has a parent folder at index 0, false otherwise.
 	 */

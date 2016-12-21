@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent" android:padding="2dip">
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dip">
+
+    <TextView
+        android:id="@+id/txttitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:textSize="16dip"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnopentask"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Open Task File" />
+
+    <Button
+        android:id="@+id/btndeletask"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Delete Task File" />
+
+    <Button
+        android:id="@+id/btnopenwp"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Open WP File" />
+
+    <Button
+        android:id="@+id/btndeletewp"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Delete WP File" />
+
+    <Button
+        android:id="@+id/btncreatethermics"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Create Thermics From IGC" />
+
+    <Button
+        android:id="@+id/btndeletethemals"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Delete Thermic File" />
+
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_filespath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text=""
+            android:textSize="15dp"
+            android:textStyle="bold"></TextView>
+
+        <TextView
+            android:id="@+id/txt_filestatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text=""
+            android:textSize="15dp"></TextView>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+</ScrollView>

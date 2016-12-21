@@ -28,7 +28,7 @@ public class FilterByFileExtension implements FileFilter {
 
 	@Override
 	public boolean accept(File file) {
-		// accept only readable files
+		// accept only readable fileslayout
 		if (file.canRead()) {
 			if (file.isDirectory()) {
 				// accept all directories

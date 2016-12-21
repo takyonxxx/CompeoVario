@@ -41,7 +41,7 @@ public class FilePicker extends Activity implements AdapterView.OnItemClickListe
 	}
 
 	private static Comparator<File> getDefaultFileComparator() {
-		// order all files by type and alphabetically by name
+		// order all fileslayout by type and alphabetically by name
 		return new Comparator<File>() {
 			@Override
 			public int compare(File file1, File file2) {
@@ -79,7 +79,7 @@ public class FilePicker extends Activity implements AdapterView.OnItemClickListe
 	private void browseToCurrentDirectory() {
 		setTitle(this.currentDirectory.getAbsolutePath());
 
-		// read the subfolders and files from the current directory
+		// read the subfolders and fileslayout from the current directory
 		if (fileDisplayFilter == null) {
 			this.files = this.currentDirectory.listFiles();
 		} else {
@@ -89,7 +89,7 @@ public class FilePicker extends Activity implements AdapterView.OnItemClickListe
 		if (this.files == null) {
 			this.files = new File[0];
 		} else {
-			// order the subfolders and files
+			// order the subfolders and fileslayout
 			Arrays.sort(this.files, fileComparator);
 		}
 

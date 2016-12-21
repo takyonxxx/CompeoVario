@@ -41,7 +41,7 @@ public class FilesActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.files);
+        setContentView(R.layout.fileslayout);
 
         txt_filestatus = (TextView)findViewById(R.id.txt_filestatus);
         txt_filespath = (TextView)findViewById(R.id.txt_filespath);

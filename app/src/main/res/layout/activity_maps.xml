@@ -261,7 +261,18 @@
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="2dp"
         android:padding="5dp"
-        android:layout_above="@+id/layoutBottomGroup"
+        android:layout_above="@+id/btnmenusettings"
         android:layout_alignParentLeft="true"/>
+
+    <Button
+        android:id="@+id/btnmenusettings"
+        style="@style/btnStyCustom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="2dp"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/layoutBottomGroup"
+        android:text="Menu"/>
 
 </RelativeLayout>

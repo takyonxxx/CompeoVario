@@ -25,10 +25,11 @@ public class OTPApp extends Application {
     public static final String BUNDLE_KEY_SETTINGS_INTENT = "timepicker minutes";
 
     public static final int CHECK_GOOGLE_PLAY_REQUEST_CODE = 3;
-
+    public static final int TASK_REQUEST_CODE = 3;
     public static final int SETTINGS_REQUEST_CODE = 2;
     public static final int FILES_REQUEST_CODE = 1;
-    public static final int WP_REQUEST_CODE = 0;
+    public static final int MENU_REQUEST_CODE = 0;
+    public static final int WP_REQUEST_CODE = 4;
 
     public static final String CHANGED_MAP_TILE_PROVIDER_RETURN_KEY = "ChangedMapTileProvider";
 

@@ -40,6 +40,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -87,6 +88,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -102,7 +104,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 import static android.content.Context.SENSOR_SERVICE;
 import static com.google.android.gms.location.LocationServices.API;
 import static java.text.DateFormat.getTimeInstance;
@@ -127,7 +128,7 @@ public class MainFragment extends Fragment implements
     private static final double PA_PER_INHG = 3386;  // Pascals per inch of mercury.
     private static final double KF_VAR_ACCEL = 0.0075;  // Variance of pressure acceleration noise input.
     private static final double KF_VAR_MEASUREMENT = 0.05;  // Variance of pressure measurement noise.
-    static boolean loginLW = false, error = false, livetrackenabled = false;
+    static boolean loginLW = false, error = false, livetrackenabled = false, logheader = false, logfooter = false;
     static String username, password, serverUrl, errorinfo;
     static int vechiletype = 1, LWcount = 0, type = 0;
     static PositionWriter liveWriter;
@@ -151,13 +152,11 @@ public class MainFragment extends Fragment implements
     int thermicresetavg = 0;
     int tpcount = 0;
     double timereset = 0;
-
     String taskFileName = "Default.tsk";
     String thermicFileName = "Thermics.txt";
     String wpFileName = "Default.cup";
     String pilotname, glidermodel, glidercertf, civlid, logfilename = null;
     String mLastUpdateTime = null;
-
     TableLayout textUpperGroup;
     TableLayout textBottomGroup;
     ToggleButton gpsOnOff;
@@ -174,7 +173,7 @@ public class MainFragment extends Fragment implements
     int logcount = 0;
     TaskManager taskmanager = null;
     ThermicCircleUtil thermic_circle = null;
-
+    private Button btnmenusettings;
     private Context mApplicationContext;
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences mPrefs;
@@ -255,6 +254,16 @@ public class MainFragment extends Fragment implements
         return altitude_m;
     }
 
+    public static void DeleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                DeleteRecursive(child);
+            }
+        }
+
+        fileOrDirectory.delete();
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -332,6 +341,17 @@ public class MainFragment extends Fragment implements
         txt_gravg = (TextView) getActivity().findViewById(R.id.txt_gravg);
         txt_varioavg = (TextView) getActivity().findViewById(R.id.txt_varioavg);
         txt_live = (TextView) getActivity().findViewById(R.id.txt_live);
+
+        btnmenusettings = (Button) getActivity().findViewById(R.id.btnmenusettings);
+
+        btnmenusettings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivityForResult(
+                        new Intent(mApplicationContext, MenuActivity.class),
+                        OTPApp.MENU_REQUEST_CODE);
+            }
+        });
+
 
         gpsOnOff = (ToggleButton) getActivity().findViewById(R.id.toggle_gps);
         //gpsOnOff.setChecked(true);
@@ -876,22 +896,25 @@ public class MainFragment extends Fragment implements
     }
 
     private void setigcfile() {
-        //B
-        java.sql.Date date = new java.sql.Date(mCurrentLocation.getTime());
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        String igcgpstime = sdf.format(date);
-        String igclat = decimalToDMSLat(mCurrentLocation.getLatitude());
-        String igclon = decimalToDMSLon(mCurrentLocation.getLongitude());
-        //A
-        String igcaltpressure = String.format("%05.0f", baroaltitude);
-        String igcaltgps = String.format("%05.0f", mCurrentLocation.getAltitude());
-        String igcval = "B" + igcgpstime.replace(":", "") + igclat + igclon + "A" + igcaltpressure + igcaltgps;
-        if (!livetrackenabled) {
-            txt_live.setText("Log: " + String.valueOf(logcount));
-        }
-        logcount++;
 
-        generateIGC_onSD(logfilename + ".igc", igcval);
+        if (logheader) {
+            //B
+            java.sql.Date date = new java.sql.Date(mCurrentLocation.getTime());
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            String igcgpstime = sdf.format(date);
+            String igclat = decimalToDMSLat(mCurrentLocation.getLatitude());
+            String igclon = decimalToDMSLon(mCurrentLocation.getLongitude());
+            //A
+            String igcaltpressure = String.format("%05.0f", baroaltitude);
+            String igcaltgps = String.format("%05.0f", mCurrentLocation.getAltitude());
+            String igcval = "B" + igcgpstime.replace(":", "") + igclat + igclon + "A" + igcaltpressure + igcaltgps;
+            if (!livetrackenabled) {
+                txt_live.setText("Log: " + String.valueOf(logcount));
+            }
+            logcount++;
+
+            generateIGC_onSD(logfilename + ".igc", igcval);
+        }
     }
 
     public String decimalToDMSLat(double coord) {
@@ -943,7 +966,8 @@ public class MainFragment extends Fragment implements
     private void checkLog() {
 
         File root = new File(Environment.getExternalStorageDirectory(), "CompeoVario");
-        File file = new File(root, logfilename);
+        File file = new File(root, logfilename + ".igc");
+
         boolean find = false;
 
         if (file.exists()) {
@@ -960,10 +984,18 @@ public class MainFragment extends Fragment implements
         }
 
         if (!find) {
-            file.delete();
+            try {
+                delete(file);
+            } catch (IOException e) {
+            }
         }
     }
 
+    void delete(File f) throws IOException {
+        if (!f.delete()) {
+            new FileNotFoundException("Failed to delete file: " + f);
+        }
+    }
 
     private void preparelogfooter() {
         try {
@@ -976,8 +1008,7 @@ public class MainFragment extends Fragment implements
             value = value + ("LXGD Downloaded " + formattedDate);
             generateIGC_onSD(logfilename + ".igc", value);
 
-            checkLog();
-
+            logfooter = true;
             logcount = 0;
 
         } catch (Exception e) {
@@ -1001,6 +1032,7 @@ public class MainFragment extends Fragment implements
             File root = new File(Environment.getExternalStorageDirectory(), "CompeoVario");
             Toast.makeText(mApplicationContext, "IGC File path\n" + root.toString(), Toast.LENGTH_LONG).show();
             generateIGC_onSD(logfilename + ".igc", value);
+            logheader = true;
 
         } catch (Exception e) {
         }
@@ -1463,13 +1495,15 @@ public class MainFragment extends Fragment implements
 
         if (takeoffLatLng != null && !logStarted) {
 
-            Calendar c = Calendar.getInstance();
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
-            String formattedDate = df.format(c.getTime());
-            logfilename = "FlightLog_" + formattedDate.replace(" ", "_");
-            preparelogheader();
-            logStarted = true;
-            loghandler.postDelayed(logrunnable, logtime);
+            if (!logheader) {
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+                String formattedDate = df.format(c.getTime());
+                logfilename = "FlightLog_" + formattedDate.replace(" ", "_");
+                preparelogheader();
+                logStarted = true;
+                loghandler.postDelayed(logrunnable, logtime);
+            }
         }
 
         mLastUpdateTime = getTimeInstance().format(new Date());
@@ -1561,13 +1595,17 @@ public class MainFragment extends Fragment implements
 
         stopdevices();
         if (takeoffLatLng != null && logStarted) {
-            preparelogfooter();
+            if (!logfooter) {
+                preparelogfooter();
+            }
         }
 
         if (livetrackenabled && loginLW) {
             setLivePos emitPos = new setLivePos();
             emitPos.execute(3);
         }
+
+        checkLog();
 
         Process.killProcess(Process.myPid());
     }
@@ -1641,9 +1679,7 @@ public class MainFragment extends Fragment implements
                     if (livetrackenabled) {
                         if (LWcount != 0) {
                             txt_live.setText("Live : " + String.valueOf(LWcount));
-                        }
-                        else
-                        {
+                        } else {
                             txt_live.setText("GPS Waiting");
                         }
                     }
