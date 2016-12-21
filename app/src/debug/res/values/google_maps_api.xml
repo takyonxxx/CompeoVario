@@ -20,5 +20,5 @@
     AIzaSyB91lG4UeCjWxG0aMTxeEjJrl7Lhn87X0Y
     AIzaSyAnxBGS5duVnlerSVLDY9t8hu_vwcDEjH4
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">  AIzaSyDpz77lGXAUeyyTqtzFAeLKkHTl-OwMwLs </string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">  YOUR API KEY </string>
 </resources>
