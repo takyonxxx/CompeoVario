@@ -31,7 +31,7 @@
             android:title="Vario Count" />
 
         <EditTextPreference
-            android:defaultValue="30"
+            android:defaultValue="60"
             android:inputType="number"
             android:key="thermicresetavg"
             android:maxLength="4"

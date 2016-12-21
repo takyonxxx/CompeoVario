@@ -88,6 +88,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,6 +102,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.SENSOR_SERVICE;
 import static com.google.android.gms.location.LocationServices.API;
 import static java.text.DateFormat.getTimeInstance;
@@ -148,6 +150,7 @@ public class MainFragment extends Fragment implements
     int thermicvariocount = 0;
     int thermicresetavg = 0;
     int tpcount = 0;
+    double timereset = 0;
 
     String taskFileName = "Default.tsk";
     String thermicFileName = "Thermics.txt";
@@ -168,6 +171,7 @@ public class MainFragment extends Fragment implements
     Boolean barometer = false, gps = false, gpsOn = false, logStarted = false, hasWind = false, hasThermic = false, drawThermic = false;
     int activeWp = 0;
     int logtime = 1000;
+    int logcount = 0;
     TaskManager taskmanager = null;
     ThermicCircleUtil thermic_circle = null;
 
@@ -202,7 +206,7 @@ public class MainFragment extends Fragment implements
         @Override
         public void run() {
 
-            if (gpsOn != null && takeoffLatLng != null && mCurrentLocation.hasAccuracy() && mCurrentLocation.hasAltitude() && logStarted) {
+            if (mCurrentLocation.hasAccuracy() && mCurrentLocation.hasAltitude() && logStarted) {
                 setigcfile();
             }
             loghandler.postDelayed(this, logtime);
@@ -561,17 +565,11 @@ public class MainFragment extends Fragment implements
 
         thermicvariovalue = Integer.parseInt(preferences.getString("thermicvariovalue", "2"));
         thermicvariocount = Integer.parseInt(preferences.getString("thermicvariocount", "10"));
-        thermicresetavg = Integer.parseInt(preferences.getString("thermicvariocount", "30"));
+        thermicresetavg = Integer.parseInt(preferences.getString("thermicvariocount", "60"));
 
         drawThermic = preferences.getBoolean("thermicdraw", false);
 
         livetrackenabled = preferences.getBoolean("livetrackenabled", false);
-
-        if (livetrackenabled) {
-            txt_live.setVisibility(View.VISIBLE);
-        } else {
-            txt_live.setVisibility(View.GONE);
-        }
 
         username = preferences.getString("liveusername", "").trim();
         password = preferences.getString("livepassword", "").trim();
@@ -888,6 +886,10 @@ public class MainFragment extends Fragment implements
         String igcaltpressure = String.format("%05.0f", baroaltitude);
         String igcaltgps = String.format("%05.0f", mCurrentLocation.getAltitude());
         String igcval = "B" + igcgpstime.replace(":", "") + igclat + igclon + "A" + igcaltpressure + igcaltgps;
+        if (!livetrackenabled) {
+            txt_live.setText("Log: " + String.valueOf(logcount));
+        }
+        logcount++;
 
         generateIGC_onSD(logfilename + ".igc", igcval);
     }
@@ -938,6 +940,31 @@ public class MainFragment extends Fragment implements
         }
     }
 
+    private void checkLog() {
+
+        File root = new File(Environment.getExternalStorageDirectory(), "CompeoVario");
+        File file = new File(root, logfilename);
+        boolean find = false;
+
+        if (file.exists()) {
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.startsWith("B")) {
+                        find = true;
+                    }
+                }
+            } catch (IOException e) {
+            }
+        }
+
+        if (!find) {
+            file.delete();
+        }
+    }
+
+
     private void preparelogfooter() {
         try {
 
@@ -948,12 +975,19 @@ public class MainFragment extends Fragment implements
             String value = "LXGD Turkay Biliyor Android Igc Version 1.00" + "\n";
             value = value + ("LXGD Downloaded " + formattedDate);
             generateIGC_onSD(logfilename + ".igc", value);
+
+            checkLog();
+
+            logcount = 0;
+
         } catch (Exception e) {
         }
     }
 
     private void preparelogheader() {
         try {
+
+            logcount = 0;
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
             String formattedDate = df.format(c.getTime());
@@ -1338,6 +1372,7 @@ public class MainFragment extends Fragment implements
             if (timedifsecs != 0) {
                 gpsvario = altdif / timedifsecs;
                 avgGpsVario.add(gpsvario);
+
                 double calcAvgVario = calculateAverageVario(avgGpsVario);
 
                 if (!barometer) {
@@ -1361,32 +1396,34 @@ public class MainFragment extends Fragment implements
             }
 
             if (altdif != 0) {
+
                 double currentgr = distance / altdif;
                 avgGR.add(currentgr);
+
                 double calcAvgGr = calculateAverageGR(avgGR);
 
                 if (taskmanager.isTaskCreated() && calcAvgGr != 0) {
                     double altovergoal = distToGoal / calcAvgGr;
-                    txt_altgoal.setText("Alt Goal\n" + df.format(altovergoal) + " m");
+                    txt_altgoal.setText("Alt On Goal\n" + df.format(altovergoal) + " m");
                 }
 
                 txt_gravg.setText("Gr Avg\n" + df.format(calcAvgGr));
 
             }
 
-            if (timedifsecs >= thermicresetavg) {
+            if (timereset > (int) thermicresetavg) {
                 avgGR.clear();
                 avgGpsVario.clear();
+                timereset = 0;
             }
 
-            mpreviousGRLocation = location;
-            previousGpsTime = location.getTime();
-            previousGRAlt = location.getAltitude();
-        } else {
-            mpreviousGRLocation = location;
-            previousGpsTime = location.getTime();
-            previousGRAlt = location.getAltitude();
+            timereset = (int) (timereset + timedifsecs);
+            //Log.d(TAG, "LogData: TimeDiff " + String.valueOf((int)timedifsecs) + " Distance: " + String.valueOf((int)distance) + " AltDiff: " + String.valueOf((int)altdif));
         }
+
+        mpreviousGRLocation = location;
+        previousGpsTime = location.getTime();
+        previousGRAlt = location.getAltitude();
     }
 
     protected void createLocationRequest() {
@@ -1401,8 +1438,7 @@ public class MainFragment extends Fragment implements
         updateLocation(location);
     }
 
-    public void updateLocation(Location location)
-    {
+    public void updateLocation(Location location) {
         mCurrentLocation = location;
 
         currentLatLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
@@ -1425,7 +1461,8 @@ public class MainFragment extends Fragment implements
             takeoffLatLng = currentLatLng;
         }
 
-        if (gpsOn && takeoffLatLng != null && !logStarted) {
+        if (takeoffLatLng != null && !logStarted) {
+
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
             String formattedDate = df.format(c.getTime());
@@ -1450,87 +1487,89 @@ public class MainFragment extends Fragment implements
         txt_altitude.setText("Altitude\n" + df.format(mCurrentLocation.getAltitude()) + " m");
         txt_speed.setText("Speed\n" + df.format(mCurrentLocation.getSpeed() * 3600 / 1000) + " km");
 
-            if (taskmanager.isTaskCreated()) {
+        if (taskmanager.isTaskCreated()) {
 
-                distToEdge = taskmanager.getDistanceToCircle(currentLatLng, activeWp);
-                //distToEdge = taskmanager.getDistanceToEdge(currentLatLng);
-                distToGoal = taskmanager.getDistanceToGoal(currentLatLng, activeWp);
-                distToTakeoff = SphericalUtil.computeDistanceBetween(currentLatLng, takeoffLatLng);
-                bearingToEdge = taskmanager.getBearingToEdge(currentLatLng);
-                //needle.rotate((int) (-1 * bearingToEdge));
-                float H = (int) bearingToEdge;
+            distToEdge = taskmanager.getDistanceToCircle(currentLatLng, activeWp);
+            //distToEdge = taskmanager.getDistanceToEdge(currentLatLng);
+            distToGoal = taskmanager.getDistanceToGoal(currentLatLng, activeWp);
+            distToTakeoff = SphericalUtil.computeDistanceBetween(currentLatLng, takeoffLatLng);
+            bearingToEdge = taskmanager.getBearingToEdge(currentLatLng);
+            //needle.rotate((int) (-1 * bearingToEdge));
+            float H = (int) bearingToEdge;
+            float M = mCurrentLocation.getBearing();
+
+            if (M > H) {
+                needle.rotate((int) (-1 * (H + (360 - M))));
+            } else {
+                needle.rotate((int) (-1 * (H - M)));
+            }
+
+            if (taskmanager.checkIfInCircle(currentLatLng, activeWp)) {
+                activeWp++;
+                taskmanager.setActiveEp(activeWp);
+            }
+
+            txt_distgoal.setText("Dist Goal\n" + df.format(distToGoal / 1000) + " km");
+            txt_disttakeoff.setText("Dist Tkf\n" + df.format(distToTakeoff / 1000) + " km");
+            txt_activewp.setText(taskmanager.getActiveEpName() + "\n" + df.format(distToEdge / 1000) + " km");
+
+        } else {
+            txt_time.setText(strtime);
+            txt_distgoal.setText("Dist Tkf\n" + df.format(distToTakeoff / 1000) + " km");
+        }
+        //new wind calculation
+        windCalculator.addSpeedVector(mCurrentLocation.getBearing(), mCurrentLocation.getSpeed() * 3600 / 1000, mCurrentLocation.getTime() / 1000.0);
+        headingArray = windCalculator.getPoints();
+        if (headingArray.length > 2) {
+            wind = FitCircle.taubinNewton(headingArray);
+            windError = FitCircle.getErrors(headingArray, wind);
+            hasWind = true;
+        } else {
+            hasWind = false;
+        }
+        if (hasWind) {
+            double windspeed = getWindSpeed();
+            if (!Double.isNaN(windspeed) && !Double.isInfinite(windspeed)) {
+
+                float windBearing = (float) getWindDirection() - mCurrentLocation.getBearing();
+                float H = windBearing;
                 float M = mCurrentLocation.getBearing();
 
                 if (M > H) {
-                    needle.rotate((int) (-1 * (H + (360 - M))));
+                    compass.rotate((int) (-1 * (H + (360 - M))));
                 } else {
-                    needle.rotate((int) (-1 * (H - M)));
+                    compass.rotate((int) (-1 * (H - M)));
                 }
-
-                if (taskmanager.checkIfInCircle(currentLatLng, activeWp)) {
-                    activeWp++;
-                    taskmanager.setActiveEp(activeWp);
-                }
-
-                txt_distgoal.setText("Dist Goal\n" + df.format(distToGoal / 1000) + " km");
-                txt_disttakeoff.setText("Dist Tkf\n" + df.format(distToTakeoff / 1000) + " km");
-                txt_activewp.setText(taskmanager.getActiveEpName() + "\n" + df.format(distToEdge / 1000) + " km");
-
-            } else {
-                txt_time.setText(strtime);
-                txt_distgoal.setText("Dist Tkf\n" + df.format(distToTakeoff / 1000) + " km");
-            }
-            //new wind calculation
-            windCalculator.addSpeedVector(mCurrentLocation.getBearing(), mCurrentLocation.getSpeed() * 3600 / 1000, mCurrentLocation.getTime() / 1000.0);
-            headingArray = windCalculator.getPoints();
-            if (headingArray.length > 2) {
-                wind = FitCircle.taubinNewton(headingArray);
-                windError = FitCircle.getErrors(headingArray, wind);
-                hasWind = true;
-            } else {
-                hasWind = false;
-            }
-            if (hasWind) {
-                double windspeed = getWindSpeed();
-                if (!Double.isNaN(windspeed) && !Double.isInfinite(windspeed)) {
-
-                    float windBearing = (float) getWindDirection() - mCurrentLocation.getBearing();
-                    float H = windBearing;
-                    float M = mCurrentLocation.getBearing();
-
-                    if (M > H) {
-                        compass.rotate((int) (-1 * (H + (360 - M))));
-                    } else {
-                        compass.rotate((int) (-1 * (H - M)));
-                    }
-                    if (taskmanager.isTaskCreated()) {
-                        txt_disttakeoff.setText("Wind Speed\n" + df.format(windspeed) + " km");
-                    } else {
-                        txt_altgoal.setText("Wind\n" + df.format(windspeed) + " km");
-                    }
+                if (taskmanager.isTaskCreated()) {
+                    txt_disttakeoff.setText("Wind Speed\n" + df.format(windspeed) + " km");
+                } else {
+                    txt_altgoal.setText("Wind\n" + df.format(windspeed) + " km");
                 }
             }
+        }
 
-            if (gpsOn) {
-                addMarker();
-            }
+        if (gpsOn) {
+            addMarker();
+        }
     }
 
     public void exit() {
+
         if (mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
-            stopdevices();
-            if (takeoffLatLng != null && logStarted) {
-                preparelogfooter();
-            }
+        }
+
+        stopdevices();
+        if (takeoffLatLng != null && logStarted) {
+            preparelogfooter();
         }
 
         if (livetrackenabled && loginLW) {
             setLivePos emitPos = new setLivePos();
             emitPos.execute(3);
-        } else {
-            Process.killProcess(Process.myPid());
         }
+
+        Process.killProcess(Process.myPid());
     }
 
     private class setLivePos extends AsyncTask<Object, Void, Boolean> {
@@ -1561,13 +1600,18 @@ public class MainFragment extends Fragment implements
 
                 } else if (loginLW && type == 2) {
 
-                    liveWriter.emitPosition(
-                            mCurrentLocation.getTime(),
-                            mCurrentLocation.getLatitude(),
-                            mCurrentLocation.getLongitude(),
-                            (float) mCurrentLocation.getAltitude(),
-                            (int) mCurrentLocation.getBearing(),
-                            mCurrentLocation.getSpeed());
+                    if (mCurrentLocation.hasAccuracy() && mCurrentLocation.hasAltitude()) {
+
+                        liveWriter.emitPosition(
+                                mCurrentLocation.getTime(),
+                                mCurrentLocation.getLatitude(),
+                                mCurrentLocation.getLongitude(),
+                                (float) mCurrentLocation.getAltitude(),
+                                (int) mCurrentLocation.getBearing(),
+                                mCurrentLocation.getSpeed());
+
+                        LWcount = liveWriter.getLWCount();
+                    }
 
                 } else if (loginLW && type == 3) {
                     liveWriter.emitEpilog();
@@ -1591,17 +1635,17 @@ public class MainFragment extends Fragment implements
                     loginLW = false;
                     type = 0;
                     LWcount = 0;
-                    txt_live.setText("Not live");
-                    if (livetrackenabled)
-                        Process.killProcess(Process.myPid());
 
                 } else {
 
-                    LWcount = liveWriter.getLWCount();
-
-                    if (livetrackenabled)
-                    {
-                        txt_live.setText("Live : " + String.valueOf(LWcount));
+                    if (livetrackenabled) {
+                        if (LWcount != 0) {
+                            txt_live.setText("Live : " + String.valueOf(LWcount));
+                        }
+                        else
+                        {
+                            txt_live.setText("GPS Waiting");
+                        }
                     }
                 }
 

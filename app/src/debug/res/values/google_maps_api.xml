@@ -14,8 +14,11 @@
 
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.
+     MD5:  9D:1C:14:5B:A1:11:8F:34:63:29:19:BA:71:E6:01:AE
+	 SHA1: 72:4C:F5:08:30:00:F1:43:EC:1B:EF:66:36:E4:58:92:55:2F:9A:3C
+	 SHA256: 32:B2:A0:D9:EA:7D:C9:CD:C2:A2:BB:68:E4:B6:78:8D:88:3B:26:9B:28:
     AIzaSyB91lG4UeCjWxG0aMTxeEjJrl7Lhn87X0Y
     AIzaSyAnxBGS5duVnlerSVLDY9t8hu_vwcDEjH4
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false"> AIzaSyAnxBGS5duVnlerSVLDY9t8hu_vwcDEjH4 </string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">  AIzaSyDpz77lGXAUeyyTqtzFAeLKkHTl-OwMwLs </string>
 </resources>

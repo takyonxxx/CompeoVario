@@ -2,37 +2,24 @@ package com.compeovario;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.WindowManager;
-import android.Manifest;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.util.Iterator;
-//AIzaSyAnxBGS5duVnlerSVLDY9t8hu_vwcDEjH4  - hp
-//AIzaSyB91lG4UeCjWxG0aMTxeEjJrl7Lhn87X0Y  - dell
-//https://console.developers.google.com/iam-admin/iam/iam-zero
-
-public class MyActivity extends FragmentActivity{
+public class MyActivity extends FragmentActivity {
 
     private MainFragment mainFragment;
     private static final String TAG = "MyActivity";
@@ -53,7 +40,7 @@ public class MyActivity extends FragmentActivity{
 
         sendBroadcast(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "MyActivity Tag");
+        wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, TAG);
         wl.acquire();
 
         setContentView(R.layout.activity);
@@ -105,11 +92,10 @@ public class MyActivity extends FragmentActivity{
 
     @Override
     protected void onDestroy() {
-
+        super.onDestroy();
         mainFragment = null;
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         wl.release();
-        super.onDestroy();
     }
 
     @Override
@@ -123,7 +109,9 @@ public class MyActivity extends FragmentActivity{
                     .setCancelable(true)
                     .setPositiveButton("YES",
                             new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,int id) {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                                    wl.release();
                                     mainFragment.exit();
                                 }
                             })
@@ -164,7 +152,6 @@ public class MyActivity extends FragmentActivity{
         client.connect();
 
 
-
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
@@ -178,72 +165,4 @@ public class MyActivity extends FragmentActivity{
         client.disconnect();
     }
 
-    private void GetCurrentLocation() {
-        locListener = new LocationListener() {
-            @Override
-            public void onStatusChanged(String provider, int status,
-                                        Bundle extras) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onLocationChanged(Location location) {
-                // TODO Auto-generated method stub
-                mainFragment.updateLocation(location);
-            }
-        };
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-
-        locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
-        locManager.requestLocationUpdates(0, 0, criteria, locListener, null);
-
-        GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
-            @Override
-            public void onGpsStatusChanged(int event) {
-                if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS || event == GpsStatus.GPS_EVENT_FIRST_FIX) {
-
-                    if (Build.VERSION.SDK_INT >= 23 &&
-                            ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                            ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    GpsStatus status = locManager.getGpsStatus(null);
-                    if (status != null) {
-                        Iterable<GpsSatellite> satellites = status.getSatellites();
-                        Iterator<GpsSatellite> sat = satellites.iterator();
-                        int i = 0;
-                        while (sat.hasNext()) {
-                            GpsSatellite satellite = sat.next();
-                            i++;
-                            if (satellite.usedInFix()) {
-
-                            } else {
-
-                            }
-                        }
-                    }
-                }
-            }
-        };
-        locManager.addGpsStatusListener(gpsStatusListener);
-    }
 }
