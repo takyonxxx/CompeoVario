@@ -11,12 +11,8 @@
         android:icon="@android:drawable/ic_menu_compass"
         android:title="@string/menu_button_enable_gps"></item>
     <item
-        android:id="@+id/task"
+        android:id="@+id/main_menu"
         android:icon="@android:drawable/ic_menu_mapmode"
-        android:title="@string/menu_button_task"></item>
-    <item
-        android:id="@+id/files"
-        android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/menu_button_files"></item>
+        android:title="@string/menu_button_menu"></item>
 
 </menu>

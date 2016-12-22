@@ -94,7 +94,7 @@
             android:defaultValue=""
             android:inputType="number"
             android:key="civlid"
-            android:summary="Define Civl ID"
+            android:summary="Define Civl ID Sample: 21450"
             android:title="Civl ID" />
 
     </PreferenceCategory>

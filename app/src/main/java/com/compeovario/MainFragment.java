@@ -46,13 +46,13 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.compeovario.maps.CachingUrlTileProvider;
 import com.compeovario.util.ArrayUtil;
 import com.compeovario.util.BeepThread;
 import com.compeovario.util.ConversionUtils;
 import com.compeovario.util.FitCircle;
+import com.compeovario.util.GPSService;
 import com.compeovario.util.KalmanFilter;
 import com.compeovario.util.LeonardoLiveWriter;
 import com.compeovario.util.PositionWriter;
@@ -137,6 +137,7 @@ public class MainFragment extends Fragment implements
     final List<Double> avgGpsVario = new ArrayList<Double>();
     final List<LatLng> lastLatLng = new ArrayList<LatLng>();
     public ArrayList<ThermalW> tpoints = new ArrayList<ThermalW>();
+
     ThermalW liftps;
 
     InputStream in_s = null;
@@ -152,17 +153,20 @@ public class MainFragment extends Fragment implements
     int thermicresetavg = 0;
     int tpcount = 0;
     double timereset = 0;
+
     String taskFileName = "Default.tsk";
     String thermicFileName = "Thermics.txt";
     String wpFileName = "Default.cup";
     String pilotname, glidermodel, glidercertf, civlid, logfilename = null;
     String mLastUpdateTime = null;
+
     TableLayout textUpperGroup;
     TableLayout textBottomGroup;
-    ToggleButton gpsOnOff;
+
     LocationRequest mLocationRequest;
     Location mCurrentLocation = null;
     Location mpreviousGRLocation = null;
+
     Marker currentMarker = null;
     LatLng currentLatLng = null, takeoffLatLng = null, previousMarkerLatLng = null, previousVarioLatLng = null;
     TextView txt_altgoal, txt_speed, txt_altitude, txt_time, txt_disttakeoff, txt_distgoal, txt_avario, txt_activewp, txt_gravg, txt_varioavg, txt_live;
@@ -171,13 +175,15 @@ public class MainFragment extends Fragment implements
     int activeWp = 0;
     int logtime = 1000;
     int logcount = 0;
+
     TaskManager taskmanager = null;
     ThermicCircleUtil thermic_circle = null;
+    Button GpsOnOff;
     private Button btnmenusettings;
     private Context mApplicationContext;
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences mPrefs;
-    private MenuItem mGPS, mWP;
+    private MenuItem mGPS;
     private GoogleMap mMap;
     private float mMaxZoomLevel;
     private TileOverlay mSelectedTileOverlay;
@@ -197,10 +203,35 @@ public class MainFragment extends Fragment implements
     private Compass compass, needle;
     private ImageView compassImage;
     private ImageView needleImage;
-
     private Handler variohandler = new Handler();
     private Handler taskhandler = new Handler();
     private Handler loghandler = new Handler();
+    private Handler gpshandler = new Handler();
+
+    private Runnable gpsrunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            GPSService mGPSService = new GPSService(mApplicationContext);
+            Location location = mGPSService.getLocation();
+
+            if (mGPSService.isLocationAvailable == false) {
+
+                txt_live.setText("GPS Waiting");
+
+            } else {
+                if(!location.hasAltitude())
+                {
+                    txt_live.setText("Gps Acc " + String.valueOf((int)mGPSService.getAccuracy()) + " m");
+                }
+                updateLocation(location);
+            }
+
+            mGPSService.closeGPS();
+            gpshandler.postDelayed(this, 1000);
+        }
+    };
+
     private Runnable logrunnable = new Runnable() {
         @Override
         public void run() {
@@ -283,6 +314,7 @@ public class MainFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setHasOptionsMenu(true);
+
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -298,20 +330,11 @@ public class MainFragment extends Fragment implements
             Log.e(OTPApp.TAG, "Not possible to obtain main view, UI won't be correctly created");
             return null;
         }
-
-
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
-       /* Display display = getWindow().getWindowManager().getDefaultDisplay();
-        int width = 0;
-        int height = 0;
-
-        width = display.getWidth();
-        height = display.getHeight();  */
     }
 
     @Override
@@ -342,6 +365,29 @@ public class MainFragment extends Fragment implements
         txt_varioavg = (TextView) getActivity().findViewById(R.id.txt_varioavg);
         txt_live = (TextView) getActivity().findViewById(R.id.txt_live);
 
+        View decorView = getActivity().getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        GpsOnOff = (Button) getActivity().findViewById(R.id.gpsswitch);
+        GpsOnOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!gpsOn) {
+                    gpsOn = true;
+                    GpsOnOff.setText("Cam On");
+                } else {
+                    gpsOn = false;
+                    GpsOnOff.setText("Cam Off");
+                    if(taskmanager != null)
+                    {
+                        taskmanager.animCamToTask();
+                    }
+                }
+            }
+        });
+
         btnmenusettings = (Button) getActivity().findViewById(R.id.btnmenusettings);
 
         btnmenusettings.setOnClickListener(new View.OnClickListener() {
@@ -351,10 +397,6 @@ public class MainFragment extends Fragment implements
                         OTPApp.MENU_REQUEST_CODE);
             }
         });
-
-
-        gpsOnOff = (ToggleButton) getActivity().findViewById(R.id.toggle_gps);
-        //gpsOnOff.setChecked(true);
 
         layoutUpperGroup = (RelativeLayout) getActivity().findViewById(R.id.layoutUpperGroup);
         layoutBottomGroup = (RelativeLayout) getActivity().findViewById(R.id.layoutBottomGroup);
@@ -388,18 +430,6 @@ public class MainFragment extends Fragment implements
             }
         });
 
-        gpsOnOff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!gpsOn) {
-                    gpsOn = true;
-
-                } else {
-                    gpsOn = false;
-                }
-            }
-        });
-
         windCalculator = new WindCalculator(16, 0.3, 300);
         wind = new double[3];
 
@@ -426,14 +456,13 @@ public class MainFragment extends Fragment implements
             SharedPreferences.Editor prefsEditor = mPrefs.edit();
             prefsEditor.commit();
         }
-
     }
 
     public void resetViews() {
         txt_altgoal.setText("Alt Goal\n0 m");
         txt_distgoal.setText("Dist Goal\n0 km");
         txt_disttakeoff.setText("Dist Tkf\n0 km");
-        txt_activewp.setText("0 km");
+        txt_activewp.setText("Active Point");
         txt_altitude.setText("Altitude\n0 m");
         txt_speed.setText("Speed\n0 km");
         txt_varioavg.setText("Vario Avg\n0 m/s");
@@ -529,6 +558,8 @@ public class MainFragment extends Fragment implements
             }
         }
 
+        gpshandler.postDelayed(gpsrunnable, 1000);
+
     }
 
     private void addInterfaceListeners() {
@@ -562,7 +593,7 @@ public class MainFragment extends Fragment implements
     public void onStart() {
         super.onStart();
 
-        if (!isGooglePlayServicesAvailable()) {
+       /* if (!isGooglePlayServicesAvailable()) {
             getActivity().finish();
         }
 
@@ -572,7 +603,7 @@ public class MainFragment extends Fragment implements
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        connectLocationClient();
+        connectLocationClient();*/
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mApplicationContext);
@@ -637,15 +668,15 @@ public class MainFragment extends Fragment implements
     }
 
     public void connectLocationClient() {
-        if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
+        /*if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
             mGoogleApiClient.connect();
-        }
+        }*/
     }
 
     public void disconnectLocationClient() {
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+       /* if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
-        }
+        }*/
     }
 
     public void onSaveInstanceState(Bundle bundle) {
@@ -656,10 +687,10 @@ public class MainFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        if (mGoogleApiClient.isConnected()) {
+       /* if (mGoogleApiClient.isConnected()) {
             createLocationRequest();
             startLocationUpdates();
-        }
+        }*/
     }
 
     @Override
@@ -683,8 +714,8 @@ public class MainFragment extends Fragment implements
         super.onCreateOptionsMenu(pMenu, inflater);
         inflater.inflate(R.menu.activity_main, pMenu);
         mGPS = pMenu.getItem(1);
-        mWP = pMenu.getItem(3);
     }
+
 
     @Override
     public void onPrepareOptionsMenu(final Menu pMenu) {
@@ -710,16 +741,10 @@ public class MainFragment extends Fragment implements
                         new Intent(getActivity(), SettingsActivity.class),
                         OTPApp.SETTINGS_REQUEST_CODE);
                 break;
-            case R.id.task:
-                Intent t = new Intent(mApplicationContext, TaskEditor.class);
-                t.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(t);
-                return true;
-
-            case R.id.files:
+            case R.id.main_menu:
                 getActivity().startActivityForResult(
-                        new Intent(getActivity(), FilesActivity.class),
-                        OTPApp.FILES_REQUEST_CODE);
+                        new Intent(mApplicationContext, MenuActivity.class),
+                        OTPApp.MENU_REQUEST_CODE);
                 return true;
 
             default:
@@ -857,7 +882,9 @@ public class MainFragment extends Fragment implements
 
     private void stopdevices() {
         try {
+
             loghandler.removeCallbacks(logrunnable);
+            gpshandler.removeCallbacks(gpsrunnable);
             variohandler.removeCallbacks(variorunnable);
             taskhandler.removeCallbacks(taskrunnable);
 
@@ -1392,6 +1419,7 @@ public class MainFragment extends Fragment implements
     public void calculatePerformance(Location location) {
 
         if (mpreviousGRLocation != null) {
+
             DecimalFormat df = new DecimalFormat("#.#");
             //double bearing = SphericalUtil.computeHeading(source, destination);
             LatLng fromlatlon = new LatLng(mpreviousGRLocation.getLatitude(), mpreviousGRLocation.getLongitude());
@@ -1401,46 +1429,60 @@ public class MainFragment extends Fragment implements
             double altdif = location.getAltitude() - previousGRAlt;
             double timedifsecs = (location.getTime() - previousGpsTime) / 1000;
 
-            if (timedifsecs != 0) {
-                gpsvario = altdif / timedifsecs;
-                avgGpsVario.add(gpsvario);
+            if (barometer) {
+                avgGpsVario.add(avgvario);
+            } else {
 
-                double calcAvgVario = calculateAverageVario(avgGpsVario);
+                gpsvario = 0;
 
-                if (!barometer) {
-                    if ((gpsvario >= thermicvariovalue) && (currentLatLng != previousVarioLatLng)) {
-                        lastLatLng.add(currentLatLng);
-
-                        if (hasThermicCount >= thermicvariocount && !hasThermic) {
-                            double radius = calculateThermicRadius(lastLatLng);
-                            createThermic(currentLatLng, radius);
-                        }
-                        hasThermicCount++;
-                        previousVarioLatLng = currentLatLng;
-                    } else {
-                        hasThermic = false;
-                        hasThermicCount = 0;
-                        lastLatLng.clear();
-                    }
+                if (timedifsecs != 0) {
+                    gpsvario = altdif / timedifsecs;
                 }
 
-                txt_varioavg.setText("Vario Avg\n" + df.format(calcAvgVario) + " m/s");
+                avgGpsVario.add(gpsvario);
+
+                if (gpsvario >= thermicvariovalue) {
+
+                    lastLatLng.add(currentLatLng);
+
+                    if (hasThermicCount >= thermicvariocount && !hasThermic) {
+                        double radius = calculateThermicRadius(lastLatLng);
+                        createThermic(currentLatLng, radius);
+                    }
+                    hasThermicCount++;
+                } else {
+                    hasThermic = false;
+                    hasThermicCount = 0;
+                    lastLatLng.clear();
+                }
             }
+
+            double calcAvgVario = calculateAverageVario(avgGpsVario);
+
+            txt_varioavg.setText("Vario Avg\n" + df.format(calcAvgVario) + " m/s");
+
+            double currentgr = 0;
 
             if (altdif != 0) {
 
-                double currentgr = distance / altdif;
-                avgGR.add(currentgr);
+                currentgr = distance / altdif;
+            }
 
-                double calcAvgGr = calculateAverageGR(avgGR);
+            avgGR.add(currentgr);
 
-                if (taskmanager.isTaskCreated() && calcAvgGr != 0) {
-                    double altovergoal = distToGoal / calcAvgGr;
-                    txt_altgoal.setText("Alt On Goal\n" + df.format(altovergoal) + " m");
+            double calcAvgGr = calculateAverageGR(avgGR);
+
+            txt_gravg.setText("Gr Avg\n" + df.format(calcAvgGr));
+
+            double altovergoal = 0;
+
+            if (taskmanager.isTaskCreated()) {
+
+                if (calcAvgGr != 0) {
+                    altovergoal = distToGoal / calcAvgGr;
                 }
 
-                txt_gravg.setText("Gr Avg\n" + df.format(calcAvgGr));
-
+                txt_altgoal.setText("Alt On Goal\n" + df.format(altovergoal) + " m");
             }
 
             if (timereset > (int) thermicresetavg) {
@@ -1450,7 +1492,13 @@ public class MainFragment extends Fragment implements
             }
 
             timereset = (int) (timereset + timedifsecs);
-            //Log.d(TAG, "LogData: TimeDiff " + String.valueOf((int)timedifsecs) + " Distance: " + String.valueOf((int)distance) + " AltDiff: " + String.valueOf((int)altdif));
+
+           /* Log.d(TAG, "LogData: TimeDiff " + String.valueOf((int)timedifsecs)
+                    + " Distance: " + String.valueOf((int)distance)
+                    + " AltDiff: " + String.valueOf((int)altdif)
+                    + " calcAvgGr " + String.valueOf(calcAvgGr)
+                    + " AltGoal " + String.valueOf(altovergoal)
+                    + " Count " + String.valueOf((int)timereset));*/
         }
 
         mpreviousGRLocation = location;
@@ -1467,7 +1515,7 @@ public class MainFragment extends Fragment implements
 
     @Override
     public void onLocationChanged(Location location) {
-        updateLocation(location);
+
     }
 
     public void updateLocation(Location location) {
@@ -1486,8 +1534,6 @@ public class MainFragment extends Fragment implements
                 emitPos.execute(2);
             }
         }
-
-        calculatePerformance(location);
 
         if (takeoffLatLng == null) {
             takeoffLatLng = currentLatLng;
@@ -1538,8 +1584,13 @@ public class MainFragment extends Fragment implements
                 needle.rotate((int) (-1 * (H - M)));
             }
 
-            if (taskmanager.checkIfInCircle(currentLatLng, activeWp)) {
+            /*Log.d(TAG, "LogData: points " + String.valueOf(taskmanager.getTaskPointCount())
+                    + " active point " + String.valueOf(activeWp));*/
+
+            if (taskmanager.checkIfInCircle(currentLatLng, activeWp) && activeWp < taskmanager.getTaskPointCount() - 1) {
+
                 activeWp++;
+
                 taskmanager.setActiveEp(activeWp);
             }
 
@@ -1582,6 +1633,8 @@ public class MainFragment extends Fragment implements
             }
         }
 
+        calculatePerformance(location);
+
         if (gpsOn) {
             addMarker();
         }
@@ -1589,11 +1642,12 @@ public class MainFragment extends Fragment implements
 
     public void exit() {
 
-        if (mGoogleApiClient.isConnected()) {
+        /*if (mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
-        }
+        }*/
 
         stopdevices();
+
         if (takeoffLatLng != null && logStarted) {
             if (!logfooter) {
                 preparelogfooter();
