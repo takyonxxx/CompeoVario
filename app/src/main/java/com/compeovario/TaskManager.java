@@ -104,6 +104,7 @@ public class TaskManager {
     private Marker edgeMarker = null;
     private List<CircleUtil> mCircles = new ArrayList<CircleUtil>();
     private Context context;
+    LatLngBounds lastbounds = null;
 
     public TaskManager(Context current, GoogleMap mMap) {
 
@@ -162,6 +163,7 @@ public class TaskManager {
             }
 
             LatLngBounds bounds = builder.build();
+            lastbounds = bounds;
 
             int width = context.getResources().getDisplayMetrics().widthPixels;
             int height = context.getResources().getDisplayMetrics().heightPixels;
@@ -242,6 +244,33 @@ public class TaskManager {
 
             } catch (Exception e) {
             }
+        }
+    }
+    public void animCamToTask()
+    {
+        if(lastbounds != null)
+        {
+            int width = context.getResources().getDisplayMetrics().widthPixels;
+            int height = context.getResources().getDisplayMetrics().heightPixels;
+            int padding = (int) (width * 0.10); // offset from edges of the map 12% of screen
+
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(lastbounds, width, height, padding),
+                    new GoogleMap.CancelableCallback() {
+                        @Override
+                        public void onFinish() {
+                            if (startLatLng != null) {
+                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder(mMap.getCameraPosition())
+                                        .target(startLatLng)
+                                        .bearing(0)
+                                        .tilt(90)
+                                        .build()));
+                            }
+                        }
+
+                        @Override
+                        public void onCancel() {
+                        }
+                    });
         }
     }
 
@@ -416,6 +445,7 @@ public class TaskManager {
 
         if (mMap != null) {
             LatLngBounds bounds = builder.build();
+            lastbounds = bounds;
 
             int width = context.getResources().getDisplayMetrics().widthPixels;
             int height = context.getResources().getDisplayMetrics().heightPixels;
@@ -1214,6 +1244,16 @@ public class TaskManager {
 
     public boolean checkIfInCircle(LatLng current, int index) {
         return mCircles.get(index).checkIfInCircle(current);
+    }
+
+    public int getTaskPointCount()
+    {
+        if( edgepoints.size() != 0)
+        {
+            return edgepoints.size();
+        }
+
+        return 0;
     }
 
     public ArrayList<LatLng> getCirclePoints(LatLng centre, double radius) {

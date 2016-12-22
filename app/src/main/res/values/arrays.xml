@@ -2,6 +2,20 @@
 
 <resources>
 
+    <string-array name="gpspower">
+        <item name="1">MAXIMUM</item>
+        <item name="2">BALANCED_POWER</item>
+        <item name="3">LOW_POWER</item>
+        <item name="4">NO_POWER</item>
+    </string-array>
+
+    <string-array name="gpspowerValues">
+        <item name="1">100</item>
+        <item name="2">102</item>
+        <item name="3">104</item>
+        <item name="4">105</item>
+    </string-array>
+
     <string-array name="updateInterval">
         <item name="1">Every 1 second</item>
         <item name="2">Every 2 seconds</item>

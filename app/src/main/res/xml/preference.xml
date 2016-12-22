@@ -48,7 +48,15 @@
 
     <PreferenceCategory
         android:key="first_category"
-        android:title="Log Settings">
+        android:title="Gps Settings">
+
+        <ListPreference
+            android:defaultValue="100"
+            android:entries="@array/gpspower"
+            android:entryValues="@array/gpspowerValues"
+            android:key="gps_power"
+            android:summary="Define gps power option"
+            android:title="Gps Power Usage" />
         <ListPreference
             android:defaultValue="3000"
             android:entries="@array/updateInterval"
@@ -56,6 +64,12 @@
             android:key="log_updates_interval"
             android:summary="Define how often log updates will be in igc"
             android:title="Log Updates interval" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="first_category"
+        android:title="LiveTrack24 Settings">
+
         <EditTextPreference
             android:inputType="text"
             android:key="liveusername"
@@ -71,7 +85,9 @@
             android:key="livetrackenabled"
             android:summary="Enable sending data to Livetrack24"
             android:title="Enable Livetrack24 on Start" />
+
     </PreferenceCategory>
+
     <PreferenceCategory
         android:key="second_category"
         android:title="Pilot Info">
@@ -94,7 +110,7 @@
             android:defaultValue=""
             android:inputType="number"
             android:key="civlid"
-            android:summary="Define Civl ID"
+            android:summary="Define Civl ID Sample: 21450"
             android:title="Civl ID" />
 
     </PreferenceCategory>
