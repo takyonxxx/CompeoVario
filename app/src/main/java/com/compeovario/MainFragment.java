@@ -52,7 +52,6 @@ import com.compeovario.util.ArrayUtil;
 import com.compeovario.util.BeepThread;
 import com.compeovario.util.ConversionUtils;
 import com.compeovario.util.FitCircle;
-import com.compeovario.util.GPSService;
 import com.compeovario.util.KalmanFilter;
 import com.compeovario.util.LeonardoLiveWriter;
 import com.compeovario.util.PositionWriter;
@@ -137,14 +136,11 @@ public class MainFragment extends Fragment implements
     final List<Double> avgGpsVario = new ArrayList<Double>();
     final List<LatLng> lastLatLng = new ArrayList<LatLng>();
     public ArrayList<ThermalW> tpoints = new ArrayList<ThermalW>();
-<<<<<<< HEAD
     int gpspower = 100;
     public static final int PRIORITY_HIGH_ACCURACY = 100;
     public static final int PRIORITY_BALANCED_POWER_ACCURACY = 102;
     public static final int PRIORITY_LOW_POWER = 104;
     public static final int PRIORITY_NO_POWER = 105;
-=======
->>>>>>> bf7a70f02d822dfeb25732854edf7ae75b6b392e
 
     ThermalW liftps;
 
@@ -220,25 +216,6 @@ public class MainFragment extends Fragment implements
         @Override
         public void run() {
 
-<<<<<<< HEAD
-=======
-            GPSService mGPSService = new GPSService(mApplicationContext);
-            Location location = mGPSService.getLocation();
-
-            if (mGPSService.isLocationAvailable == false) {
-
-                txt_live.setText("GPS Waiting");
-
-            } else {
-                if(!location.hasAltitude())
-                {
-                    txt_live.setText("Gps Acc " + String.valueOf((int)mGPSService.getAccuracy()) + " m");
-                }
-                updateLocation(location);
-            }
-
-            mGPSService.closeGPS();
->>>>>>> bf7a70f02d822dfeb25732854edf7ae75b6b392e
             gpshandler.postDelayed(this, 1000);
         }
     };
@@ -569,11 +546,7 @@ public class MainFragment extends Fragment implements
             }
         }
 
-<<<<<<< HEAD
        // gpshandler.postDelayed(gpsrunnable, 1000);
-=======
-        gpshandler.postDelayed(gpsrunnable, 1000);
->>>>>>> bf7a70f02d822dfeb25732854edf7ae75b6b392e
 
     }
 
@@ -608,7 +581,7 @@ public class MainFragment extends Fragment implements
     public void onStart() {
         super.onStart();
 
-       /* if (!isGooglePlayServicesAvailable()) {
+        if (!isGooglePlayServicesAvailable()) {
             getActivity().finish();
         }
 
@@ -618,7 +591,7 @@ public class MainFragment extends Fragment implements
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        connectLocationClient();*/
+        connectLocationClient();
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mApplicationContext);
@@ -691,15 +664,15 @@ public class MainFragment extends Fragment implements
     }
 
     public void connectLocationClient() {
-        /*if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
+        if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
             mGoogleApiClient.connect();
-        }*/
+        }
     }
 
     public void disconnectLocationClient() {
-       /* if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
-        }*/
+        }
     }
 
     public void onSaveInstanceState(Bundle bundle) {
@@ -710,11 +683,11 @@ public class MainFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-       /* if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             createLocationRequest();
             stopLocationUpdates();
             startLocationUpdates();
-        }*/
+        }
     }
 
     @Override
@@ -1497,7 +1470,6 @@ public class MainFragment extends Fragment implements
             double calcAvgGr = calculateAverageGR(avgGR);
 
             txt_gravg.setText("Gr Avg\n" + df.format(calcAvgGr));
-<<<<<<< HEAD
 
             double altovergoal = 0;
 
@@ -1508,18 +1480,6 @@ public class MainFragment extends Fragment implements
                 }
 
                 txt_altgoal.setText("Alt On Goal\n" + df.format(altovergoal /1000) + " km");
-=======
-
-            double altovergoal = 0;
-
-            if (taskmanager.isTaskCreated()) {
-
-                if (calcAvgGr != 0) {
-                    altovergoal = distToGoal / calcAvgGr;
-                }
-
-                txt_altgoal.setText("Alt On Goal\n" + df.format(altovergoal) + " m");
->>>>>>> bf7a70f02d822dfeb25732854edf7ae75b6b392e
             }
 
             if (timereset > (int) thermicresetavg) {
@@ -1558,7 +1518,6 @@ public class MainFragment extends Fragment implements
     @Override
     public void onLocationChanged(Location location) {
 
-<<<<<<< HEAD
         if (location.hasAccuracy() == false) {
 
             txt_live.setText("GPS Waiting");
@@ -1571,8 +1530,6 @@ public class MainFragment extends Fragment implements
             }
             updateLocation(location);
         }
-=======
->>>>>>> bf7a70f02d822dfeb25732854edf7ae75b6b392e
     }
 
     public void updateLocation(Location location) {
@@ -1699,9 +1656,9 @@ public class MainFragment extends Fragment implements
 
     public void exit() {
 
-        /*if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
-        }*/
+        }
 
         stopdevices();
 
