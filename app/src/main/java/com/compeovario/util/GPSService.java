@@ -152,12 +152,34 @@ public class GPSService extends Service implements LocationListener {
 			}
 			// If the reverse geocode returned an address
 			if (addresses != null && addresses.size() > 0) {
+<<<<<<< HEAD
 
 				String addressText = getCompleteAddressString(mLatitude,mLongitude);
 
 				return addressText;
 			} else {
 				return "No address found by the service.";
+=======
+				// Get the first address
+				Address address = addresses.get(0);
+				/*
+				 * Format the first line of address (if available), city, and
+				 * country name.
+				 */
+				String addressText = String.format(
+						"%s, %s, %s",
+						// If there's a street address, add it
+						address.getMaxAddressLineIndex() > 0 ? address
+								.getAddressLine(0) : "",
+						// Locality is usually a city
+						address.getLocality(),
+						// The country of the address
+						address.getCountryName());
+				// Return the text
+				return addressText;
+			} else {
+				return "No address found by the service: Note to the developers, If no address is found by google itself, there is nothing you can do about it.";
+>>>>>>> bf7a70f02d822dfeb25732854edf7ae75b6b392e
 			}
 		} else {
 			return "Location Not available";
@@ -165,6 +187,7 @@ public class GPSService extends Service implements LocationListener {
 
 	}
 
+<<<<<<< HEAD
 	private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
 		String strAdd = "";
 		Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -184,6 +207,9 @@ public class GPSService extends Service implements LocationListener {
 		}
 		return strAdd;
 	}
+=======
+	
+>>>>>>> bf7a70f02d822dfeb25732854edf7ae75b6b392e
 
 	/**
 	 * get latitude
