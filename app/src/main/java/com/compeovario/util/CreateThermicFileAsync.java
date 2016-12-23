@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.compeovario.FilesActivity;
 import com.compeovario.ThermalW;
@@ -40,8 +41,8 @@ public class CreateThermicFileAsync extends AsyncTask<String, String, String> {
     Context context;
     String filePath;
 
-    int thermicvariovalue = 0;
-    int thermicvariocount = 0;
+    double thermicvariovalue = 2;
+    int thermicvariocount = 10;
 
     String starttime = null,endtime = null,newtime = null,oldtime = null,
             lat = null,lathems = null,firstlathems = null,lastlathems = null,
@@ -63,9 +64,15 @@ public class CreateThermicFileAsync extends AsyncTask<String, String, String> {
         mProgressDialog.setCancelable(true);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        try{
+            thermicvariovalue = Double.parseDouble(preferences.getString("thermicvariovalue", "2"));
+            thermicvariocount = Integer.parseInt(preferences.getString("thermicvariocount", "10"));
+        }
+        catch(NumberFormatException nfe)
+        {
+            Toast.makeText(context,"Error: Check Settings values...",Toast.LENGTH_SHORT).show();
+        }
 
-        thermicvariovalue = Integer.parseInt(preferences.getString("thermicvariovalue", "2"));
-        thermicvariocount = Integer.parseInt(preferences.getString("thermicvariocount", "10"));
         drawThermic = preferences.getBoolean("thermicdraw", false);
 
     }

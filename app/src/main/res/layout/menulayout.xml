@@ -18,28 +18,36 @@
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/btnmenusettings"
-        style="@style/btnStyCustom"
+        android:id="@+id/btnmenufiles"
+        style="@style/btnStyleGenoa"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="Settings" />
+        android:text="Manage Flight Files" />
 
     <Button
         android:id="@+id/btnmenutask"
-        style="@style/btnStyCustom"
+        style="@style/btnStyleGenoa"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
         android:text="Task Manger" />
 
     <Button
-        android:id="@+id/btnmenufiles"
-        style="@style/btnStyCustom"
+        android:id="@+id/btnmenulocation"
+        style="@style/btnStyleGenoa"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="Manage Files" />
+        android:text="My Location" />
+
+    <Button
+        android:id="@+id/btnmenusettings"
+        style="@style/btnStyleGenoa"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="Settings" />
 
 </LinearLayout>
 

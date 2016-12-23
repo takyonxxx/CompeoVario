@@ -49,7 +49,7 @@
         <activity android:name=".TaskEditor"/>
         <activity android:name=".FilesActivity"/>
         <activity android:name=".MenuActivity"/>
-
+        <activity android:name=".GpsActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

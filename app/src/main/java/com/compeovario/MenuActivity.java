@@ -22,7 +22,7 @@ import java.nio.channels.FileChannel;
 
 public class MenuActivity extends Activity {
 
-    private Button btnmenusettings,btnmenutask,btnmenufiles;
+    private Button btnmenusettings,btnmenutask,btnmenufiles,btnmenulocation;
 
     private static final String TAG = "MenuActivity";
 
@@ -35,6 +35,7 @@ public class MenuActivity extends Activity {
         btnmenusettings = (Button) findViewById(R.id.btnmenusettings);
         btnmenutask = (Button) findViewById(R.id.btnmenutask);
         btnmenufiles = (Button) findViewById(R.id.btnmenufiles);
+        btnmenulocation = (Button) findViewById(R.id.btnmenulocation);
 
         btnmenusettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -57,6 +58,14 @@ public class MenuActivity extends Activity {
                 startActivityForResult(
                         new Intent(getApplicationContext(), FilesActivity.class),
                         OTPApp.FILES_REQUEST_CODE);
+            }
+        });
+
+        btnmenulocation.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivityForResult(
+                        new Intent(getApplicationContext(), GpsActivity.class),
+                        OTPApp.LOCATION_REQUEST_CODE);
             }
         });
     }
