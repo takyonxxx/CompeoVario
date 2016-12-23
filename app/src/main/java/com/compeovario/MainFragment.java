@@ -593,6 +593,23 @@ public class MainFragment extends Fragment implements
         connectLocationClient();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mApplicationContext);
+<<<<<<< HEAD
+=======
+        pilotname = preferences.getString("pilotname", "n/a");
+        glidermodel = preferences.getString("glidermodel", "n/a");
+        glidercertf = preferences.getString("glidercertf", "n/a");
+        civlid = preferences.getString("civlid", "n/a");
+        String logtimestr = preferences.getString("log_updates_interval", "3000");
+        logtime = (int) Integer.parseInt(logtimestr);
+        String gpspowerstr = preferences.getString("gps_power", "100");
+        gpspower = (int) Integer.parseInt(gpspowerstr);
+
+        if (mGoogleApiClient.isConnected()) {
+            createLocationRequest();
+            stopLocationUpdates();
+            startLocationUpdates();
+        }
+>>>>>>> 0e10a083ebec0d65989caeffa305c772a6fce1be
 
         try
         {
@@ -1456,6 +1473,19 @@ public class MainFragment extends Fragment implements
                     gpsvario = altdif / timedifsecs;
                 }
 
+<<<<<<< HEAD
+=======
+            if (barometer) {
+                avgGpsVario.add(avgvario);
+            } else {
+
+                gpsvario = 0;
+
+                if (timedifsecs != 0) {
+                    gpsvario = altdif / timedifsecs;
+                }
+
+>>>>>>> 0e10a083ebec0d65989caeffa305c772a6fce1be
                 avgGpsVario.add(gpsvario);
 
                 if (gpsvario >= thermicvariovalue) {
@@ -1472,6 +1502,7 @@ public class MainFragment extends Fragment implements
                     hasThermicCount = 0;
                     lastLatLng.clear();
                 }
+<<<<<<< HEAD
             }
 
             double calcAvgVario = calculateAverageVario(avgGpsVario);
@@ -1508,6 +1539,36 @@ public class MainFragment extends Fragment implements
                 {
                     txt_altgoal.setText("Alt On Goal\n" + df.format(altovergoal) + " m");
                 }
+=======
+            }
+
+            double calcAvgVario = calculateAverageVario(avgGpsVario);
+
+            txt_varioavg.setText("Vario Avg\n" + df.format(calcAvgVario) + " m/s");
+
+            double currentgr = 0;
+
+            if (altdif != 0) {
+
+                currentgr = distance / altdif;
+            }
+
+            avgGR.add(currentgr);
+
+            double calcAvgGr = calculateAverageGR(avgGR);
+
+            txt_gravg.setText("Gr Avg\n" + df.format(calcAvgGr));
+
+            double altovergoal = 0;
+
+            if (taskmanager.isTaskCreated()) {
+
+                if (calcAvgGr != 0) {
+                    altovergoal = distToGoal / calcAvgGr;
+                }
+
+                txt_altgoal.setText("Alt On Goal\n" + df.format(altovergoal /1000) + " km");
+>>>>>>> 0e10a083ebec0d65989caeffa305c772a6fce1be
             }
 
             if (timereset > (int) thermicresetavg) {
@@ -1518,12 +1579,20 @@ public class MainFragment extends Fragment implements
 
             timereset = (int) (timereset + timedifsecs);
 
+<<<<<<< HEAD
             /*Log.d(TAG, "LogData: TimeDiff " + String.valueOf((int)timedifsecs)
+=======
+           /* Log.d(TAG, "LogData: TimeDiff " + String.valueOf((int)timedifsecs)
+>>>>>>> 0e10a083ebec0d65989caeffa305c772a6fce1be
                     + " Distance: " + String.valueOf((int)distance)
                     + " AltDiff: " + String.valueOf((int)altdif)
                     + " calcAvgGr " + String.valueOf(calcAvgGr)
                     + " AltGoal " + String.valueOf(altovergoal)
+<<<<<<< HEAD
                     + " Count " + String.valueOf((int)timereset) + " - " + String.valueOf(thermicresetavg));*/
+=======
+                    + " Count " + String.valueOf((int)timereset));*/
+>>>>>>> 0e10a083ebec0d65989caeffa305c772a6fce1be
         }
 
         mpreviousGRLocation = location;
@@ -1554,7 +1623,10 @@ public class MainFragment extends Fragment implements
             {
                 txt_live.setText("Gps Acc " + String.valueOf((int)location.getAccuracy()) + " m");
             }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0e10a083ebec0d65989caeffa305c772a6fce1be
             updateLocation(location);
         }
     }

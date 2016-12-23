@@ -35,6 +35,7 @@
 
     <Button
         android:id="@+id/btnmenulocation"
+<<<<<<< HEAD
         style="@style/btnStyleGenoa"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -47,6 +48,20 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
+=======
+        style="@style/btnStyleOrange"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="My Location" />
+
+    <Button
+        android:id="@+id/btnmenusettings"
+        style="@style/btnStyCustom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+>>>>>>> 0e10a083ebec0d65989caeffa305c772a6fce1be
         android:text="Settings" />
 
 </LinearLayout>

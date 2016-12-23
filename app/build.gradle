@@ -7,7 +7,11 @@ android {
         applicationId "com.compeovario"
         minSdkVersion 12
         targetSdkVersion 25
+<<<<<<< HEAD
         versionCode 12
+=======
+        versionCode 11
+>>>>>>> 0e10a083ebec0d65989caeffa305c772a6fce1be
         versionName "11"
         multiDexEnabled true
     }
