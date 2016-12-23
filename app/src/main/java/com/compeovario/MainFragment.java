@@ -52,6 +52,7 @@ import com.compeovario.util.ArrayUtil;
 import com.compeovario.util.BeepThread;
 import com.compeovario.util.ConversionUtils;
 import com.compeovario.util.FitCircle;
+import com.compeovario.util.FlightRadar;
 import com.compeovario.util.KalmanFilter;
 import com.compeovario.util.LeonardoLiveWriter;
 import com.compeovario.util.PositionWriter;
@@ -446,7 +447,7 @@ public class MainFragment extends Fragment implements
     }
 
     public void resetViews() {
-        txt_altgoal.setText("Alt Goal\n0 m");
+        txt_altgoal.setText("Alt On Goal\n0 m");
         txt_distgoal.setText("Dist Goal\n0 km");
         txt_disttakeoff.setText("Dist Tkf\n0 km");
         txt_activewp.setText("Active Point");
@@ -1556,7 +1557,16 @@ public class MainFragment extends Fragment implements
             }
 
             updateLocation(location);
+
+            // String radarregion="europe";
+            // getFlightData("http://krk.fr24.com/zones/fcgi/"+ radarregion +"_all.json");
         }
+    }
+
+    private void getFlightData(String url)
+    {
+        FlightRadar planeRadar = new FlightRadar(mApplicationContext,mMap,mCurrentLocation);
+        planeRadar.execute(url);
     }
 
     public void updateLocation(Location location) {

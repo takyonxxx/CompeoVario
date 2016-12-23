@@ -3,12 +3,13 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.compeovario"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 12
-        versionName "12"
+        versionCode 13
+        versionName "13"
         multiDexEnabled true
     }
     buildTypes {

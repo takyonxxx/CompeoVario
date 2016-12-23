@@ -24,14 +24,11 @@ public class MyActivity extends FragmentActivity {
     private MainFragment mainFragment;
     private static final String TAG = "MyActivity";
     private PowerManager.WakeLock wl;
-    private LocationManager locManager;
-    private LocationListener locListener;
-    /**
+   /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
-    LocationManager mLocMgr;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
