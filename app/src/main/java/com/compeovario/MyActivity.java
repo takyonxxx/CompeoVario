@@ -1,10 +1,13 @@
 package com.compeovario;
+import android.*;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -24,6 +28,8 @@ public class MyActivity extends FragmentActivity {
     private MainFragment mainFragment;
     private static final String TAG = "MyActivity";
     private PowerManager.WakeLock wl;
+    private final static int REQUEST_LOCATION = 1;
+    private final static int MY_PERMISSIONS_REQUEST_READ_STORAGE = 2;
    /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -57,11 +63,91 @@ public class MyActivity extends FragmentActivity {
             fragmentTransaction.commit();
         }
 
+        if(StoragePermissionCheck())
+        {
+            GPSPremissionCheck();
+        }
+
         //GetCurrentLocation();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    private boolean StoragePermissionCheck()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && this.checkSelfPermission(android.Manifest.permission. READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{android.Manifest.permission. READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_STORAGE);
+            return false;
+        }
+        else
+        {
+            AppLog.logString("AppLog Storage PERMISSION_GRANTED");
+            return true;
+        }
+    }
+
+    private boolean GPSPremissionCheck()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && this.checkSelfPermission(
+                android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && this.checkSelfPermission(
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION);
+            return false;
+        }
+        else
+        {
+            AppLog.logString("AppLog Gps PERMISSION_GRANTED");
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        if (requestCode == REQUEST_LOCATION)
+        {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {            //  gps functionality
+                AppLog.logString("AppLog Gps PERMISSION_GRANTED");
+            }
+            else
+            {
+                flashMessage("We Need permission for running gps");
+            }
+        }
+        else if (requestCode == MY_PERMISSIONS_REQUEST_READ_STORAGE)
+        {
+            //premission to read storage
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                GPSPremissionCheck();
+                AppLog.logString("AppLog Storage PERMISSION_GRANTED");
+
+            } else
+            {
+                flashMessage("We Need permission for logging to Storage");
+            }
+
+        }
+    }
+
+    public void flashMessage(String customText) {
+        try {
+
+            Toast.makeText(getBaseContext(), customText, Toast.LENGTH_LONG).show();
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
