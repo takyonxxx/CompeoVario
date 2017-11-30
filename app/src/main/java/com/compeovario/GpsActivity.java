@@ -2,7 +2,7 @@ package com.compeovario;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,7 +15,7 @@ import com.compeovario.util.GPSService;
 
 import java.text.DecimalFormat;
 
-public class GpsActivity extends ActionBarActivity {
+public class GpsActivity extends AppCompatActivity {
 	final static String DEGREE = "\u00b0";
 
 	@Override
