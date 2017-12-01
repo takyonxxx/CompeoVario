@@ -1,4 +1,4 @@
-package com.variometerpro;
+package com.compeovario;
 
 import android.util.Log;
 
